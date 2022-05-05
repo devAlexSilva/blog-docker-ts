@@ -1,0 +1,17 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "make a API to practice development with TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.31",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
+  }
+}
