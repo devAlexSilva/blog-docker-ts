@@ -2,16 +2,20 @@
   "name": "blog",
   "version": "1.0.0",
   "description": "make a API to practice development with TypeScript",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "dev": "node main.ts"
+    "dev": "npx ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^17.0.31",
+    "prisma": "^3.13.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.13.0"
   }
 }
