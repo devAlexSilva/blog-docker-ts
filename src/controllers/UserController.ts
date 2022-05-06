@@ -5,12 +5,12 @@ import { prisma } from '../Db/PrismaClient'
 export class UserController {
 
     private validateCharacters = {
-        regexName: function (name: string) {
-            const regex = /^[~^´ç`a-zA-Z0-9]{1,30}$/
+        regexName: (name: string) => {
+            const regex = /^(?=.*[a-zA-Z0-9])[\s'a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,30}$/
             return regex.test(name)
         },
 
-        regexPassword: function (password:string){
+        regexPassword: (password: string) => {
             const regexPassword = /^(?=.*[@!#$%^&*()/\\])[@!#$%^&*()/\\a-zA-Z0-9]{6,20}$/
             return regexPassword.test(password)
         }
@@ -32,7 +32,7 @@ export class UserController {
         const { name, email } = req.body
 
         if (!name || !email) return res.status(400).json({ error: 'name and email is required' })
-        if(!this.validateCharacters.regexName(name)) return res.status(400).json({error: 'the name has forbidden characters'})
+        if (!this.validateCharacters.regexName(name)) return res.status(400).json({ error: 'the name has forbidden characters' })
 
         try {
             const userAlreadyExists = await prisma.user.findFirst({
@@ -60,9 +60,8 @@ export class UserController {
         const { id } = req.params
         const { name } = req.body
 
-        const regexName = this.validateCharacters.regexName(name)
-        //const regexName = /^[~^´ç`a-zA-Z0-9]{1,30}$/;
-        if (!regexName) return res.status(400).json({ error: 'the name has forbidden characters' });
+        const isValidName = this.validateCharacters.regexName(name)
+        if (!isValidName) return res.status(400).json({ error: 'the name has forbidden characters' });
 
         try {
             await prisma.user.update({
@@ -73,11 +72,26 @@ export class UserController {
                     name: name
                 }
             })
-
             return res.status(200).json({ message: 'name has been changed' })
         }
         catch (err) {
             return res.status(304).json({ error: 'not modified' });
+        }
+    }
+
+    async delete(req: Request, res: Response) {
+        const { id } = req.params
+        
+        try {
+            await prisma.user.delete({
+                where: {
+                    id: Number(id)
+                }
+            })
+            return res.status(200).json({ message: 'user has been successfully deleted' })
+        }
+        catch (err) {
+            return res.status(400).json({ error: 'failed to delete user' })
         }
     }
 }

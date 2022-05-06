@@ -17,4 +17,9 @@ router.put('/update/:id', async (req, res) => {
     await new UserController().update(req, res)
     res.end();
 })
+
+router.delete('/delete/:id', async (req, res) => {
+    await new UserController().delete(req, res)
+    res.end()
+})
 export { router }
