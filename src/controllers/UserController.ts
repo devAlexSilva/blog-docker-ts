@@ -24,7 +24,7 @@ export class UserController {
             return res.status(200).send(users)
         }
         catch (err) {
-            return res.status(400).json({ error: err })
+            return res.status(500).json({ error: err.meta })
         }
     }
 
@@ -52,7 +52,7 @@ export class UserController {
             return res.status(201).json({ message: 'user successfully created' })
         }
         catch (err) {
-            return res.status(400).json({ error: `failed to create user: ${err}` })
+            return res.status(500).json({ error: `failed to create user: ${err.meta}` })
         }
     }
 
@@ -61,7 +61,7 @@ export class UserController {
         const { name } = req.body
 
         const isValidName = this.validateCharacters.regexName(name)
-        if (!isValidName) return res.status(400).json({ error: 'the name has forbidden characters' });
+        if (!isValidName) return res.status(304).json({ error: 'the name has forbidden characters' });
 
         try {
             await prisma.user.update({
@@ -91,7 +91,7 @@ export class UserController {
             return res.status(200).json({ message: 'user has been successfully deleted' })
         }
         catch (err) {
-            return res.status(400).json({ error: 'failed to delete user' })
+            return res.status(304).json({ error: 'failed to delete user' })
         }
     }
 }
