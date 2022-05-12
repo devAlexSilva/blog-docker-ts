@@ -51,7 +51,7 @@ export class UserController {
             return res.status(201).json({ message: 'user successfully created' })
         }
         catch (err) {
-            return res.status(500).json({ error: `failed to create user` })
+            return res.status(500).json({ error: 'failed to create user' })
         }
     }
 
