@@ -1,43 +1,42 @@
 import { Request, Response } from 'express'
 import { prisma } from '../Db/PrismaClient'
-
+import { regex } from '../auxiliaryFunction/Regex'
+import { hash } from '../auxiliaryFunction/hashPassword'
 
 export class UserController {
 
-    private validateCharacters = {
-        regexName: (name: string) => {
-            const regex = /^(?=.*[a-zA-Z0-9])[\s'a-zA-Z0-9áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]{1,30}$/
-            return regex.test(name)
-        },
-
-        regexPassword: (password: string) => {
-            const regexPassword = /^(?=.*[@!#$%^&*()/\\])[@!#$%^&*()/\\a-zA-Z0-9]{6,20}$/
-            return regexPassword.test(password)
-        }
-    }
-
     async get(res: Response) {
         try {
-            const users = await prisma.user.findMany()
+            const users = await prisma.user.findMany({
+                select: { 
+                    id: true,
+                    email: true,
+                    profile: true
+                 }
+            })
 
             if (users[0] == null) return res.status(200).json({ message: 'users not found' })
             return res.status(200).send(users)
         }
         catch (err) {
-            return res.status(500).json({ error: err.meta })
+            return res.status(500).json({ error: 'failed in search users' })
         }
     }
 
     async create(req: Request, res: Response) {
-        const { name, email } = req.body
+        const { email, password } = req.body
 
-        if (!name || !email) return res.status(400).json({ error: 'name and email is required' })
-        if (!this.validateCharacters.regexName(name)) return res.status(400).json({ error: 'the name has forbidden characters' })
+        if (!password || !email) return res.status(400)
+            .json({ error: 'password and email is required' })
+        if (!regex.password(password)) return res.status(400)
+            .json({ error: 'the password need (min = 6, max = 20) and at least one symbol' })
+
+        const hashPassword = await hash.password(password)
 
         try {
             const userAlreadyExists = await prisma.user.findFirst({
                 where: {
-                    email: email
+                    email
                 }
             })
 
@@ -45,43 +44,20 @@ export class UserController {
 
             await prisma.user.create({
                 data: {
-                    name: name,
-                    email: email
+                    email,
+                    password: hashPassword
                 }
             })
             return res.status(201).json({ message: 'user successfully created' })
         }
         catch (err) {
-            return res.status(500).json({ error: `failed to create user: ${err.meta}` })
-        }
-    }
-
-    async update(req: Request, res: Response) {
-        const { id } = req.params
-        const { name } = req.body
-
-        const isValidName = this.validateCharacters.regexName(name)
-        if (!isValidName) return res.status(304).json({ error: 'the name has forbidden characters' });
-
-        try {
-            await prisma.user.update({
-                where: {
-                    id: Number(id)
-                },
-                data: {
-                    name: name
-                }
-            })
-            return res.status(200).json({ message: 'name has been changed' })
-        }
-        catch (err) {
-            return res.status(304).json({ error: 'not modified' });
+            return res.status(500).json({ error: `failed to create user` })
         }
     }
 
     async delete(req: Request, res: Response) {
         const { id } = req.params
-        
+
         try {
             await prisma.user.delete({
                 where: {
