@@ -3,23 +3,26 @@ import { prisma } from '../Db/PrismaClient'
 import { regex } from '../auxiliaryFunction/Regex'
 import { hash } from '../auxiliaryFunction/hashPassword'
 
+
 export class UserController {
 
-    async get(res: Response) {
+    async getById(req: Request, res: Response) {
+        const { id: _id } = req.params
         try {
-            const users = await prisma.user.findMany({
-                select: { 
+            const user = await prisma.user.findFirst({
+                where: {
+                    id: Number(_id)
+                },
+                select: {
                     id: true,
                     email: true,
                     profile: true
-                 }
+                }
             })
-
-            if (users[0] == null) return res.status(200).json({ message: 'users not found' })
-            return res.status(200).send(users)
+            return res.send(user)
         }
         catch (err) {
-            return res.status(500).json({ error: 'failed in search users' })
+            return res.status(500).json({ error: 'there was a error on server' })
         }
     }
 
@@ -67,7 +70,7 @@ export class UserController {
             return res.status(200).json({ message: 'user has been successfully deleted' })
         }
         catch (err) {
-            return res.status(304).json({ error: 'failed to delete user' })
+            return res.status(400).json({ error: 'failed to delete user' })
         }
     }
 }

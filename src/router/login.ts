@@ -1,8 +1,8 @@
-import express from 'express'
+import { Router } from 'express'
 import { Token } from '../controllers/TokenLoginController'
 
 
-const router = express.Router()
+const router = Router()
 
 router.post('/', async (req, res) => {
     await new Token(req, res).create()

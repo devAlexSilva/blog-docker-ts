@@ -1,24 +1,21 @@
-import express from 'express'
+import { Router } from 'express'
 import { UserController } from '../controllers/UserController'
+import { Authentication } from '../controllers/AuthMiddleware'
 
-const router = express.Router()
 
-router.get('/', async (req, res) => {
-    await new UserController().get(res)
+const router = Router()
+
+router.get('/:id', Authentication, async(req, res)=>{
+    await new UserController().getById(req, res)
     return res.end()
 })
 
-router.post('/create', async (req, res) => {
+router.post('/', async (req, res) => {
     await new UserController().create(req, res)
     return res.end()
 })
-/*
-router.put('/update/:id', async (req, res) => {
-    await new UserController().update(req, res)
-    res.end();
-})
-*/
-router.delete('/delete/:id', async (req, res) => {
+
+router.delete('/:id', async (req, res) => {
     await new UserController().delete(req, res)
     res.end()
 })
