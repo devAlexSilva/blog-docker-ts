@@ -5,7 +5,7 @@ import { loginRouter } from './login'
 
 const routes = Router();
 
-routes.use('/user', userRoutes)
+routes.use('/users', userRoutes)
 routes.use('/login', loginRouter)
 
 export { routes }

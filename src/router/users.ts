@@ -5,7 +5,7 @@ import { Authentication } from '../controllers/AuthMiddleware'
 
 const router = Router()
 
-router.get('/:id', Authentication, async(req, res)=>{
+router.get('/', Authentication, async(req, res)=>{
     await new UserController().getById(req, res)
     return res.end()
 })

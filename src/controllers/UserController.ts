@@ -38,9 +38,7 @@ export class UserController {
 
         try {
             const userAlreadyExists = await prisma.user.findFirst({
-                where: {
-                    email
-                }
+                where: { email }
             })
 
             if (userAlreadyExists) return res.status(400).json({ error: 'this email already exists' })
