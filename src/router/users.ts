@@ -5,7 +5,7 @@ import { Authentication } from '../controllers/AuthMiddleware'
 
 const router = Router()
 
-router.get('/', Authentication, async(req, res)=>{
+router.get('/', Authentication, async (req, res) => {
     await new UserController().getById(req, res)
     return res.end()
 })
@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
     return res.end()
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/', Authentication, async (req, res) => {
     await new UserController().delete(req, res)
     res.end()
 })

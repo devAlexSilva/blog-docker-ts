@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { prisma } from '../Db/PrismaClient'
 
+
 const secret = process.env.JWT_SECRET || 'fixProblem"undefined"'
 type body = {
     email: string,

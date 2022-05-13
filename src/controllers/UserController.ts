@@ -8,6 +8,7 @@ export class UserController {
 
     async getById(req: Request, res: Response) {
         const { id: _id } = req.params
+        
         try {
             const user = await prisma.user.findFirst({
                 where: {
@@ -19,6 +20,8 @@ export class UserController {
                     profile: true
                 }
             })
+
+            if(!user) return res.status(204)
             return res.send(user)
         }
         catch (err) {
