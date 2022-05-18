@@ -11,4 +11,4 @@ router.get('/', Authentication, profile.getOneProfile)
 router.get('/all', profile.getAllProfiles)
 router.put('/', Authentication, profile.updateProfile)
 
-export { router as profiles }
+export { router as profileRoutes }

@@ -9,4 +9,4 @@ router.post('/', async (req, res) => {
     res.end()
 })
 
-export { router as loginRouter }
+export { router as loginRoutes }
