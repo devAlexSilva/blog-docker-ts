@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { regex } from '../auxiliaryFunction/Regex'
 import { prisma } from '../Db/PrismaClient'
 
 
@@ -20,6 +21,9 @@ export class Post {
     async createPost(req: Request, res: Response) {
         const _id = req.params.id
         const { title, content }: post = req.body
+
+        if (!title || !content) return res.status(400).json({ error: 'there is empty field' })
+        if (!regex.name(title)) return res.status(400).json({ error: 'title contains forbidden characters' })
 
         try {
             const post = await prisma.user.update({
@@ -73,10 +77,7 @@ export class Post {
         try {
             const posts = await prisma.post.findFirst({
                 where: {
-                    id: Number(postId),
-                    /*AND: {
-                        published: true
-                    }*/
+                    id: Number(postId)
                 }
             })
 
@@ -103,13 +104,15 @@ export class Post {
 
     async updatePosts(req: Request, res: Response) {
         const { postId } = req.params
-        const _id = req.params.id
-        const { title, content }: post = req.body
+        const userId = req.params.id
+        const { title, content, published }: post = req.body
+
+        if (!regex.name(title)) return res.status(400).json({ error: 'title contains forbidden characters' })
 
         try {
             const matchUser = await prisma.user.findUnique({
                 where: {
-                    id: Number(_id)
+                    id: Number(userId)
                 }
             })
             if (!matchUser) return res.sendStatus(400)
@@ -120,7 +123,8 @@ export class Post {
                 },
                 data: {
                     title,
-                    content
+                    content,
+                    published
                 }
             })
             return res.send(updatedPost)
