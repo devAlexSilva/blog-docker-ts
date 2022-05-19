@@ -51,7 +51,7 @@ export class Token {
     async create() {
         const { passwordIsCorrect, matchId } = await this.verifyBody(this.req.body)
 
-        if (!passwordIsCorrect) return 0
+        if (!passwordIsCorrect) return 
 
         const _token = jwt.sign({ id: matchId }, secret, { expiresIn: '1h' })
         return this.res.status(200).json({ token: _token })

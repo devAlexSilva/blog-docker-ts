@@ -14,25 +14,8 @@ type post = {
     author?: string
     authorId?: string
 }
+
 export class Post {
-
-    async getAllPostsByUser(req: Request, res: Response) {
-        const id = req.params.id
-
-        try {
-            const posts = await prisma.post.findMany({
-                where: {
-                    authorId: Number(id)
-                }
-            })
-
-            if (!posts[0]) return res.json({ message: 'there is no posts' })
-            return res.send(posts)
-        }
-        catch (err) {
-            return res.sendStatus(400)
-        }
-    }
 
     async createPost(req: Request, res: Response) {
         const _id = req.params.id
@@ -63,6 +46,87 @@ export class Post {
         }
         catch (err) {
             return res.status(304).json({ error: 'failed to create post' })
+        }
+    }
+
+    async getAllPostsByUser(req: Request, res: Response) {
+        const id = req.params.id
+
+        try {
+            const posts = await prisma.post.findMany({
+                where: {
+                    authorId: Number(id)
+                }
+            })
+
+            if (!posts[0]) return res.json({ message: 'there is no posts' })
+            return res.send(posts)
+        }
+        catch (err) {
+            return res.sendStatus(400)
+        }
+    }
+
+    async getPostsById(req: Request, res: Response) {
+        const { postId } = req.params
+
+        try {
+            const posts = await prisma.post.findFirst({
+                where: {
+                    id: Number(postId),
+                    /*AND: {
+                        published: true
+                    }*/
+                }
+            })
+
+            if (!posts) return res.status(400).json({ message: 'post not found' })
+            
+            await prisma.post.update({
+                where: {
+                    id: Number(postId)
+                },
+                data: {
+                    viewCount: {
+                        increment: 1
+                    }
+                }
+            })
+            
+            
+            return res.send(posts)
+        }
+        catch (err) {
+            return res.sendStatus(500)
+        }
+    }
+
+    async updatePosts(req: Request, res: Response) {
+        const { postId } = req.params
+        const _id = req.params.id
+        const { title, content }: post = req.body
+
+        try {
+            const matchUser = await prisma.user.findUnique({
+                where: {
+                    id: Number(_id)
+                }
+            })
+            if (!matchUser) return res.sendStatus(400)
+
+            const updatedPost = await prisma.post.update({
+                where: {
+                    id: Number(postId)
+                },
+                data: {
+                    title,
+                    content
+                }
+            })
+            return res.send(updatedPost)
+        }
+        catch (err) {
+            return res.sendStatus(400)
         }
     }
 

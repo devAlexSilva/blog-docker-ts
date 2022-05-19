@@ -8,5 +8,7 @@ const post = new Post()
 
 router.get('/', Authentication, post.getAllPostsByUser)
 router.post('/', Authentication, post.createPost)
+router.get('/:postId', Authentication, post.getPostsById)
+router.put('/:postId', Authentication, post.updatePosts)
 
 export { router as postRoutes }
