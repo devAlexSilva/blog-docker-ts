@@ -22,7 +22,7 @@ model Profile {
   name   String
   bio    String?
   userId Int     @unique
-  user   User    @relation(fields: [userId], references: [id])
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profiles")
 }
@@ -37,7 +37,7 @@ model Post {
   updatedAt DateTime @updatedAt
   stars     Int      @default(0)
   viewCount Int      @default(0)
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@map("posts")
 }
