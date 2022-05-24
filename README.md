@@ -22,6 +22,16 @@ if you need to change something in the project then run the command after saving
 ```bash
   docker-compose build
   docker-compose up
+```  
+
+You can get the container ID using the following command  
+```bash
+  docker ps
+```
+
+when the containers are active, run  
+```bash
+  docker exec id_of_container npx prisma db push
 ```
 
 now you can access API routes in your ```http://localhost:2727```

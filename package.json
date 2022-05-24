@@ -4,7 +4,7 @@
   "description": "make a API to practice development with TypeScript",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node-dev src/app/app.ts",
+    "start": "ts-node-dev --respawn --transpile-only src/app/app.ts",
     "dev": "ts-node-dev --respawn --transpile-only src/app/app.ts"
   },
   "keywords": [],

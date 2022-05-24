@@ -14,7 +14,6 @@ export class Feed {
 
     async getPostsByIdOrTitle(req: Request, res: Response) {
         const query: queries = req.query
-        console.log(query)
 
         try {
             const posts = await prisma.post.findMany({
