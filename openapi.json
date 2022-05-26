@@ -2,7 +2,7 @@
     "openapi": "3.0.3",
     "info": {
         "title": "REST API to Blog and Social media",
-        "description": "made for front-end developers to build their applications consuming the API\\nand for back-end developers to base their projects on",
+        "description": "made for front-end developers to build their applications consuming the API and for back-end developers to base their projects on",
         "contact": {
             "email": "9apsilva@gmail.com",
             "github": "@devAlexSilva"
@@ -44,7 +44,7 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/User",
                                     "bearerAuth": {
-                                        "$ref": "#/components/schemas/BearerAuth"
+                                        "$ref": "#/components/securitySchemes/BearerAuth"
                                     }
                                 }
                             }
@@ -89,6 +89,13 @@
                         "example": "depois continuo"
                     }
                 }
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
     }
