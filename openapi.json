@@ -1,0 +1,95 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "REST API to Blog and Social media",
+        "description": "made for front-end developers to build their applications consuming the API\\nand for back-end developers to base their projects on",
+        "contact": {
+            "email": "9apsilva@gmail.com",
+            "github": "@devAlexSilva"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:2727",
+            "description": "local test"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "login into the application",
+                "description": "route to generate the JWT",
+                "tags": [
+                    "user"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "unauthorized",
+                        "message": "invalid token"
+                    },
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User",
+                                    "bearerAuth": {
+                                        "$ref": "#/components/schemas/BearerAuth"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "required": true,
+                        "example": "alex@doe.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "required": true,
+                        "example": "ss@d4458w@g3"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Alex Doe Dev"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "alex@doe.com"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "depois continuo"
+                    }
+                }
+            }
+        }
+    }
+}

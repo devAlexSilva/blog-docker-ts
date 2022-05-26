@@ -1,6 +1,6 @@
 # API BLOG
 
-make a basic API to practice development with TypeScript and Docker
+make a API to practice development with TypeScript and Docker
 
 ## Stacks
 
