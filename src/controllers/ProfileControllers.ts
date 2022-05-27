@@ -38,9 +38,16 @@ export class Profile {
     }
 
     async getAllProfiles(req: Request, res: Response) {
+        try{
         const profiles = await prisma.profile.findMany()
-        if (!profiles) return res.json({ message: 'no registered profile' })
+        
+        if (!profiles) return res.status(204).json({ message: 'no registered profile' })
+        
         return res.send(profiles)
+        }
+        catch(err){
+            return res.status(500).json({error: 'there was a error on server'})
+        }
     }
 
     async getOneProfile(req: Request, res: Response) {
