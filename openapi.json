@@ -36,6 +36,9 @@
     "paths": {
         "/login": {
             "post": {
+                "security": [
+                    {}
+                ],
                 "summary": "login into the application",
                 "tags": [
                     "login"
@@ -82,8 +85,8 @@
                             }
                         }
                     },
-                    "500": {
-                        "description": "internal error",
+                    "default": {
+                        "description": "Unexpected error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -97,9 +100,157 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "bearerAuth": {
-                                        "$ref": "#/components/securitySchemes/BearerAuth"
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "kjadakdwd56dwd45wd8d451dsdwd19qds"
+                                        }
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "post": {
+                "security": [
+                    {}
+                ],
+                "summary": "register new user",
+                "tags": [
+                    "users"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "empty fields",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "password and email is required"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "999": {
+                        "description": "password format invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "the password need (min = 6, max = 20) and at least one symbol"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "998": {
+                        "description": "user already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "this email already exists"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user successfully created"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error/500"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "get user info by id in token",
+                "tags": [
+                    "users"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "no content",
+                        "content": ""
+                    },
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Users"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "there was a error on server"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error/401"
                                 }
                             }
                         }
@@ -222,7 +373,7 @@
                         },
                         "viewCount": {
                             "type": "integer",
-                            "example": 14    
+                            "example": 14
                         }
                     }
                 }
@@ -236,6 +387,15 @@
                             "example": "there was an error on server"
                         }
                     }
+                },
+                "401": {
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "invalid token"
+                        }
+                    }
                 }
             }
         },
@@ -246,5 +406,10 @@
                 "bearerFormat": "JWT"
             }
         }
-    }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ]
 }
