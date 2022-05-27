@@ -52,7 +52,7 @@ export class Profile {
                     userId: Number(id)
                 }
             })
-            if (!profile) return res.json({ message: 'this user yet has no profile' })
+            if (!profile) return res.status(204).json({ message: 'this user yet has no profile' })
             return res.send(profile)
         }
         catch (err) {
