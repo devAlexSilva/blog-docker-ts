@@ -23,7 +23,7 @@ export class Post {
         const { title, content }: post = req.body
 
         if (!title || !content) return res.status(400).json({ error: 'there is empty field' })
-        if (!regex.name(title)) return res.status(400).json({ error: 'title contains forbidden characters' })
+        if (!regex.title(title)) return res.status(400).json({ error: 'title contains forbidden characters' })
 
         try {
             const post = await prisma.user.update({

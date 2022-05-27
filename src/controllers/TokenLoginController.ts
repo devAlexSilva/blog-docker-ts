@@ -33,13 +33,13 @@ export class Token {
                     id: true
                 }
             })
-            if (!hashedPassword) return this.res.status(400).json({ error: 'this email isn\'t in use' })
+            if (!hashedPassword) return this.res.status(400).json({ error: 'email or password is wrong' })
 
             const matchId = hashedPassword?.id
             const matchPassword = hashedPassword?.password || 'ever will be a string'
             const passwordIsCorrect = await bcrypt.compare(body.password, matchPassword)
 
-            if (!passwordIsCorrect) return this.res.status(400).json({ error: 'password is wrong' })
+            if (!passwordIsCorrect) return this.res.status(400).json({ error: 'email or password is wrong' })
             return { passwordIsCorrect, matchId }
         }
 

@@ -15,13 +15,30 @@
             "description": "local test"
         }
     ],
+    "tags": [
+        {
+            "name": "login",
+            "description": "route to generate the JWT"
+        },
+        {
+            "name": "users",
+            "description": "logged users resources"
+        },
+        {
+            "name": "profiles",
+            "description": "logged user profile resources"
+        },
+        {
+            "name": "posts",
+            "description": "posting resources"
+        }
+    ],
     "paths": {
         "/login": {
             "post": {
                 "summary": "login into the application",
-                "description": "route to generate the JWT",
                 "tags": [
-                    "user"
+                    "login"
                 ],
                 "requestBody": {
                     "content": {
@@ -33,16 +50,53 @@
                     }
                 },
                 "responses": {
-                    "401": {
-                        "description": "unauthorized",
-                        "message": "invalid token"
-                    },
-                    "200": {
-                        "description": "ok",
+                    "400": {
+                        "description": "missing fields in body",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/User",
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "email and password is required"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "999": {
+                        "description": "credentials incorrect",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "email or password is wrong"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "internal error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error/500"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "the token was generated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "bearerAuth": {
                                         "$ref": "#/components/securitySchemes/BearerAuth"
                                     }
@@ -72,21 +126,115 @@
                     }
                 }
             },
-            "User": {
+            "Users": {
                 "type": "object",
                 "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "Alex Doe Dev"
+                    "id": {
+                        "type": "integer",
+                        "example": 28
                     },
                     "email": {
                         "type": "string",
                         "example": "alex@doe.com"
                     },
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date",
-                        "example": "depois continuo"
+                    "profile": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 7
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Alex Doe Dev"
+                            },
+                            "bio": {
+                                "type": "string",
+                                "example": "this is a example about how much i would like to finish this"
+                            },
+                            "userId": {
+                                "type": "integer",
+                                "example": 28
+                            }
+                        }
+                    }
+                },
+                "Profiles": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "example": 7
+                        },
+                        "name": {
+                            "type": "string",
+                            "example": "Alex Doe Dev"
+                        },
+                        "bio": {
+                            "type": "string",
+                            "example": "this is a example about how much i would like to finish this"
+                        },
+                        "userId": {
+                            "type": "integer",
+                            "example": 28
+                        }
+                    }
+                }
+            },
+            "Posts": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "example": 6
+                        },
+                        "title": {
+                            "type": "string",
+                            "example": "a cool title for the swagger api"
+                        },
+                        "content": {
+                            "type": "string",
+                            "example": "this is my definition about how should be a cool title, and i know, i know, my english is pool, buuuut i will improve very fast because... well, cuz i want"
+                        },
+                        "published": {
+                            "type": "boolean",
+                            "example": false
+                        },
+                        "authorId": {
+                            "type": "integer",
+                            "example": 28
+                        },
+                        "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2022-05-27T00:47:29.243Z"
+                        },
+                        "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2022-05-29T11:58:29.243Z"
+                        },
+                        "stars": {
+                            "type": "integer",
+                            "example": 3
+                        },
+                        "viewCount": {
+                            "type": "integer",
+                            "example": 14    
+                        }
+                    }
+                }
+            },
+            "Error": {
+                "500": {
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "there was an error on server"
+                        }
                     }
                 }
             }

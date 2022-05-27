@@ -11,5 +11,5 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiDocument))
 
 app.use(routes)
 app.get('/', (req, res) => {
-    res.send('documentation with swagger...')
+    res.send('documentation in /docs')
 })
