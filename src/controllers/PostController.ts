@@ -63,11 +63,11 @@ export class Post {
                 }
             })
 
-            if (!posts[0]) return res.json({ message: 'there is no posts' })
+            if (!posts[0]) return res.status(204).json({ message: 'there is no posts' })
             return res.send(posts)
         }
         catch (err) {
-            return res.sendStatus(400)
+            return res.sendStatus(500)
         }
     }
 
@@ -81,7 +81,7 @@ export class Post {
                 }
             })
 
-            if (!posts) return res.status(400).json({ message: 'post not found' })
+            if (!posts) return res.status(404).json({ message: 'post not found' })
             
             await prisma.post.update({
                 where: {
@@ -130,7 +130,7 @@ export class Post {
             return res.send(updatedPost)
         }
         catch (err) {
-            return res.sendStatus(400)
+            return res.sendStatus(304).json({error: 'update failed'})
         }
     }
 
