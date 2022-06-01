@@ -54,22 +54,6 @@
                 },
                 "responses": {
                     "400": {
-                        "description": "missing fields in body",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "email and password is required"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "999": {
                         "description": "credentials incorrect",
                         "content": {
                             "application/json": {
@@ -134,22 +118,6 @@
                 },
                 "responses": {
                     "400": {
-                        "description": "empty fields",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "password and email is required"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "999": {
                         "description": "password format invalid",
                         "content": {
                             "application/json": {
@@ -159,22 +127,6 @@
                                         "error": {
                                             "type": "string",
                                             "example": "the password need (min = 6, max = 20) and at least one symbol"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "998": {
-                        "description": "user already exists",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "this email already exists"
                                         }
                                     }
                                 }
@@ -700,7 +652,7 @@
         "/users/posts/{postId}": {
             "get": {
                 "summary": "get post by id",
-                "description":"get a posts and increment views count",
+                "description": "get a posts and increment views count",
                 "tags": [
                     "posts"
                 ],
